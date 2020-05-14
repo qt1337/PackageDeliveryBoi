@@ -12,6 +12,13 @@ class PackageList extends StatefulWidget {
 
 class _PackageListState extends State<PackageList> {
   int _counter = 0;
+  Future<PLE.DeliveryStatus> futureDeliveryStatus;
+
+  @override
+  void initState() {
+    super.initState();
+    futureDeliveryStatus = PLE.fetchDeliveryStatus('00340434292135100094');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,18 +26,31 @@ class _PackageListState extends State<PackageList> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: getPackageListView(),
+      body:
+          //getPackageListView(),
+          FutureBuilder<PLE.DeliveryStatus>(
+              future: futureDeliveryStatus,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Text(snapshot.data.id + "\n" + snapshot.data.status);
+                } else if (snapshot.hasError) {
+                  return Text("${snapshot.error}");
+                }
+                return CircularProgressIndicator();
+              }),
       floatingActionButton: FloatingActionButton(
         onPressed: _buttonTestAction,
         tooltip: 'Add Package',
         child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
   }
 
-  void _buttonTestAction(){
+  void _buttonTestAction() {
     setState(() {
-      print(PLE.fetchDeliveryStatus('00340434292135100094'));
+      Future<PLE.DeliveryStatus> test =
+          PLE.fetchDeliveryStatus('00340434292135100094');
+      print(test);
       _counter++;
     });
   }
@@ -38,7 +58,6 @@ class _PackageListState extends State<PackageList> {
   Widget getPackageListView() {
     var packageListView = ListView(
       children: <Widget>[
-
         ListTile(
           leading: Icon(Icons.tv),
           title: Text("Fernseher"),

@@ -16,12 +16,15 @@ Future<DeliveryStatus> fetchDeliveryStatus(id) async {
 
 class DeliveryStatus {
   String id;
+  String status;
 
   DeliveryStatus(
-      {this.id});
+      {this.id, this.status});
 
   factory DeliveryStatus.fromJson(Map<String, dynamic> json) {
     return DeliveryStatus(
-        id: json['shipments'][0]['id']);
+        id: json['shipments'][0]['id'],
+        status: json['shipments'][0]['status']['status']
+    );
   }
 }
