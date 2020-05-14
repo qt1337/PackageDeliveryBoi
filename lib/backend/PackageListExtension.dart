@@ -1,8 +1,6 @@
-import 'dart:html';
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 Future<DeliveryStatus> fetchDeliveryStatus(id) async {
@@ -17,7 +15,7 @@ Future<DeliveryStatus> fetchDeliveryStatus(id) async {
 }
 
 class DeliveryStatus {
-  int id;
+  String id;
 
   DeliveryStatus(
       {this.id});
@@ -26,18 +24,4 @@ class DeliveryStatus {
     return DeliveryStatus(
         id: json['shipments'][0]['id']);
   }
-}
-
-void saveData(id, name) async {
-  final prefs = await SharedPreferences.getInstance();
-
-  prefs.setString('id', id);
-  prefs.setString('name', name);
-}
-
-void readData() async {
-  final prefs = await SharedPreferences.getInstance();
-
-  final id = prefs.getString('id') ?? null;
-  final name = prefs.getString('name') ?? null;
 }
