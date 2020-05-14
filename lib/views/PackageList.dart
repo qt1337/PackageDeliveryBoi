@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:package_delivery_boi/backend/PackageListExtension.dart' as PLE;
 
 class PackageList extends StatefulWidget {
   PackageList({Key key, this.title}) : super(key: key);
@@ -29,7 +30,7 @@ class _PackageListState extends State<PackageList> {
 
   void _buttonTestAction(){
     setState(() {
-      print('Test');
+      print(PLE.fetchDeliveryStatus('00340434292135100094'));
       _counter++;
     });
   }
