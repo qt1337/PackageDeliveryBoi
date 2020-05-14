@@ -10,13 +10,6 @@ class PackageList extends StatefulWidget {
 }
 
 class _PackageListState extends State<PackageList> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,25 +17,38 @@ class _PackageListState extends State<PackageList> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
-          ],
-        ),
-      ),
+      body: getPackageListView(),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
+        tooltip: 'Add Package',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+}
+
+Widget getPackageListView() {
+  var packageListView = ListView(
+    children: <Widget>[
+
+      ListTile(
+        leading: Icon(Icons.tv),
+        title: Text("Fernseher"),
+        subtitle: Text("DHL"),
+        trailing: Text("In Zustellung"),
+      ),
+      ListTile(
+        leading: Icon(Icons.tv),
+        title: Text("Fernseher"),
+        subtitle: Text("DHL"),
+        trailing: Text("In Zustellung"),
+      ),
+      ListTile(
+        leading: Icon(Icons.tv),
+        title: Text("Fernseher"),
+        subtitle: Text("DHL"),
+        trailing: Text("In Zustellung"),
+      ),
+    ],
+  );
+  return packageListView;
 }
