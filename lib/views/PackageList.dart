@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:developer';
 
 class PackageList extends StatefulWidget {
   PackageList({Key key, this.title}) : super(key: key);
@@ -19,10 +20,15 @@ class _PackageListState extends State<PackageList> {
       ),
       body: getPackageListView(),
       floatingActionButton: FloatingActionButton(
+        onPressed: _buttonTestAction,
         tooltip: 'Add Package',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  void _buttonTestAction(){
+    log('Test');
   }
 }
 
