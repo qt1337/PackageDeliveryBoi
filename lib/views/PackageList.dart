@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:developer';
 
 class PackageList extends StatefulWidget {
   PackageList({Key key, this.title}) : super(key: key);
@@ -11,6 +10,7 @@ class PackageList extends StatefulWidget {
 }
 
 class _PackageListState extends State<PackageList> {
+  int _counter = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -28,33 +28,36 @@ class _PackageListState extends State<PackageList> {
   }
 
   void _buttonTestAction(){
-    log('Test');
+    setState(() {
+      print('Test');
+      _counter++;
+    });
   }
-}
 
-Widget getPackageListView() {
-  var packageListView = ListView(
-    children: <Widget>[
+  Widget getPackageListView() {
+    var packageListView = ListView(
+      children: <Widget>[
 
-      ListTile(
-        leading: Icon(Icons.tv),
-        title: Text("Fernseher"),
-        subtitle: Text("DHL"),
-        trailing: Text("In Zustellung"),
-      ),
-      ListTile(
-        leading: Icon(Icons.tv),
-        title: Text("Fernseher"),
-        subtitle: Text("DHL"),
-        trailing: Text("In Zustellung"),
-      ),
-      ListTile(
-        leading: Icon(Icons.tv),
-        title: Text("Fernseher"),
-        subtitle: Text("DHL"),
-        trailing: Text("In Zustellung"),
-      ),
-    ],
-  );
-  return packageListView;
+        ListTile(
+          leading: Icon(Icons.tv),
+          title: Text("Fernseher"),
+          subtitle: Text("DHL"),
+          trailing: Text("In Zustellung"),
+        ),
+        ListTile(
+          leading: Icon(Icons.tv),
+          title: Text("Fernseher"),
+          subtitle: Text("DHL"),
+          trailing: Text("In Zustellung"),
+        ),
+        ListTile(
+          leading: Icon(Icons.tv),
+          title: Text("Fernseher"),
+          subtitle: Text("$_counter"),
+          trailing: Text("In Zustellung"),
+        ),
+      ],
+    );
+    return packageListView;
+  }
 }
