@@ -11,7 +11,7 @@ Future<String> get _localPath async {
 //Create Reference to file location
 Future<File> get _localFile async {
   final path = await _localPath;
-  return File('$path/pacakgelist.txt');
+  return File('$path/packagelist.txt');
 }
 
 //Write Data
