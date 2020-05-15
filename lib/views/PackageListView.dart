@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:package_delivery_boi/controller/PackageListController.dart'
     as PLE;
+import 'package:package_delivery_boi/controller/Utility.dart';
 import 'package:package_delivery_boi/models/StatusModel.dart';
 
 class PackageList extends StatefulWidget {
@@ -13,17 +14,21 @@ class PackageList extends StatefulWidget {
 }
 
 class _PackageListState extends State<PackageList> {
+  List<StatusModel> listEntries = [];
+
   @override
   void initState() {
     super.initState();
+    _fillList().then((result) {
+      setState(() {
+        listEntries.addAll(result);
+      });
+    });
   }
 
-  static StatusModel test1 = new StatusModel("id1", "in Bearbeitung", "Handy", Icons.phone, "DHL");
-  static StatusModel test2 = new StatusModel("id2", "in Zustellung", "Fernseher", Icons.tv, "Hermes");
-  static StatusModel test3 = new StatusModel("id3", "Zugestellt", "Auto", Icons.directions_car, "UPS");
-
-  List<StatusModel> listEntries = <StatusModel>[test1,test2,test3];
-
+  Future<List<StatusModel>> _fillList() async {
+    return await readList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +60,7 @@ class _PackageListState extends State<PackageList> {
     setState(() {
       listEntries.add(package);
     });
+    writeList(listEntries);
   }
 
   Future<StatusModel> _openAddPackageDialog(BuildContext context) {
