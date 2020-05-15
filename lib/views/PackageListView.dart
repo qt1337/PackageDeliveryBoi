@@ -44,27 +44,31 @@ class _PackageListState extends State<PackageList> {
     TextEditingController customControllerName = new TextEditingController();
     TextEditingController customControllerId = new TextEditingController();
 
-    return showDialog(context: context, builder: (context) {
-      return AlertDialog(
-        title: Text("Add a package"),
-        content: getTextFieldsForDialog(customControllerName, customControllerId),
-        actions: <Widget>[
-          MaterialButton(
-            elevation: 5.0,
-            child: Text("Add"),
-            onPressed: () {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Add a package"),
+          content: getTextFieldsForDialog(customControllerName, customControllerId),
+          actions: <Widget>[
+            MaterialButton(
+              elevation: 5.0,
+              child: Text("Add"),
+              onPressed: () {
 
-              Navigator.of(context).pop(customControllerName.text.toString() + " with package number " + customControllerId.text.toString());
+                Navigator.of(context).pop(customControllerName.text.toString() + " with package number " + customControllerId.text.toString());
 
-            },
-          )
-        ],
-        shape: RoundedRectangleBorder(
-          borderRadius:
-            BorderRadius.circular(20.0)
-        ),
-      );
-    });
+              },
+            )
+          ],
+          backgroundColor: Colors.red,
+          shape: RoundedRectangleBorder(
+            borderRadius:
+              BorderRadius.circular(20.0)
+          ),
+        );
+      },
+      barrierDismissible: false);
   }
 
   Widget getTextFieldsForDialog(TextEditingController controllerName, TextEditingController controllerId) {
