@@ -20,9 +20,9 @@ class _PackageListState extends State<PackageList> {
       ),
       body: Builder(
         builder: (context) =>
-          getPackageListView(),
+          getPackageListView(), // ListView
       ),
-      floatingActionButton:
+      floatingActionButton: // addButton
         Builder(
           builder: (context) =>
             FloatingActionButton(
@@ -41,27 +41,46 @@ class _PackageListState extends State<PackageList> {
 
   Future<String> _openAddPackageDialog(BuildContext context) {
 
-    TextEditingController customController = new TextEditingController();
+    TextEditingController customControllerName = new TextEditingController();
+    TextEditingController customControllerId = new TextEditingController();
 
     return showDialog(context: context, builder: (context) {
       return AlertDialog(
-        title: Text("Package name"),
-        content: TextField(
-          controller: customController,
-        ),
+        title: Text("Add a package"),
+        content: getTextFieldsForDialog(customControllerName, customControllerId),
         actions: <Widget>[
           MaterialButton(
             elevation: 5.0,
             child: Text("Add"),
             onPressed: () {
 
-              Navigator.of(context).pop(customController.text.toString());
+              Navigator.of(context).pop(customControllerName.text.toString() + " with package number " + customControllerId.text.toString());
 
             },
           )
         ],
+        shape: RoundedRectangleBorder(
+          borderRadius:
+            BorderRadius.circular(20.0)
+        ),
       );
     });
+  }
+
+  Widget getTextFieldsForDialog(TextEditingController controllerName, TextEditingController controllerId) {
+    
+    return Column(
+      children: <Widget>[
+        Text("Product"),
+        TextField(
+          controller: controllerName,
+        ),
+        Text("Package Number"),
+        TextField(
+          controller: controllerId,
+        ),
+      ],
+    );
   }
 
   Widget getPackageListView() {
