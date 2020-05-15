@@ -1,5 +1,7 @@
+import 'package:package_delivery_boi/models/StatusModel.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
+import 'dart:convert';
 
 // Get correct file Path
 Future<String> get _localPath async {
@@ -15,17 +17,29 @@ Future<File> get _localFile async {
 }
 
 //Write Data
-Future<File> writeList(List<String> list) async {
+Future<File> writeList(List<StatusModel> modelList) async {
   final file = await _localFile;
 
   // Convert to json
-  String json = '';
+  List<Map> objList;
+  for(StatusModel tmpObj in modelList){
+    var tmpMap = {
+      'id': tmpObj.id,
+      'status': tmpObj.status,
+      'name': tmpObj.name
+    };
+
+    objList.add(tmpMap);
+  }
+
+  String objJson = JsonEncoder().convert(objList);
+
   // Write the file.
-  return file.writeAsString(json);
+  return file.writeAsString(objJson);
 }
 
 //Read Data
-Future<int> readList() async {
+Future<List<StatusModel>> readList() async {
   try {
     final file = await _localFile;
 
@@ -33,7 +47,16 @@ Future<int> readList() async {
     String contents = await file.readAsString();
 
     //Convert back to list
-    return int.parse(contents);
+    List<StatusModel> resList;
+    List<Map> tmpList = JsonDecoder().convert(contents);
+    
+    for(Map tmpObj in tmpList){
+      StatusModel tmpModel = new StatusModel(tmpObj['id'], tmpObj['status'], tmpObj['name']);
+
+      resList.add(tmpModel);
+    }
+    
+    return resList;
   } catch (e) {
     // If encountering an error, return 0.
     return 0;
