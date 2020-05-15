@@ -52,7 +52,7 @@ Future<List<StatusModel>> readList() async {
     String contents = await file.readAsString();
 
     //Convert back to list
-    List<StatusModel> resList;
+    List<StatusModel> resList = List<StatusModel>();
     List<Map> tmpList = JsonDecoder().convert(contents);
     
     for(Map tmpObj in tmpList){
