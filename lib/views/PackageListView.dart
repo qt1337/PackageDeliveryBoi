@@ -11,14 +11,6 @@ class PackageList extends StatefulWidget {
 }
 
 class _PackageListState extends State<PackageList> {
-  int _counter = 0;
-  Future<PLE.DeliveryStatus> futureDeliveryStatus;
-
-  @override
-  void initState() {
-    super.initState();
-    futureDeliveryStatus = PLE.fetchDeliveryStatus('00340434292135100094');
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,29 +18,49 @@ class _PackageListState extends State<PackageList> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body:
-          //getPackageListView(),
-          FutureBuilder<PLE.DeliveryStatus>(
-              future: futureDeliveryStatus,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return Text(snapshot.data.id + "\n" + snapshot.data.status);
-                } else if (snapshot.hasError) {
-                  return Text("${snapshot.error}");
-                }
-                return CircularProgressIndicator();
-              }),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _buttonTestAction,
-        tooltip: 'Add Package',
-        child: Icon(Icons.add),
+      body: Builder(
+        builder: (context) =>
+          getPackageListView(),
       ),
+      floatingActionButton:
+        Builder(
+          builder: (context) =>
+            FloatingActionButton(
+              onPressed: () {
+                _openAddPackageDialog(context).then((onValue) {
+                  SnackBar mySnackbar = SnackBar(content: Text("Package $onValue added."));
+                  Scaffold.of(context).showSnackBar(mySnackbar);
+                });
+              },
+              tooltip: 'Add Package',
+              child: Icon(Icons.add),
+            )
+        )
     );
   }
 
-  void _buttonTestAction() {
-    setState(() {
-      _counter++;
+  Future<String> _openAddPackageDialog(BuildContext context) {
+
+    TextEditingController customController = new TextEditingController();
+
+    return showDialog(context: context, builder: (context) {
+      return AlertDialog(
+        title: Text("Package name"),
+        content: TextField(
+          controller: customController,
+        ),
+        actions: <Widget>[
+          MaterialButton(
+            elevation: 5.0,
+            child: Text("Add"),
+            onPressed: () {
+
+              Navigator.of(context).pop(customController.text.toString());
+
+            },
+          )
+        ],
+      );
     });
   }
 
@@ -62,16 +74,16 @@ class _PackageListState extends State<PackageList> {
           trailing: Text("In Zustellung"),
         ),
         ListTile(
-          leading: Icon(Icons.tv),
-          title: Text("Fernseher"),
+          leading: Icon(Icons.phone),
+          title: Text("Handy"),
           subtitle: Text("DHL"),
-          trailing: Text("In Zustellung"),
+          trailing: Text("In Bearbeitung"),
         ),
         ListTile(
           leading: Icon(Icons.tv),
           title: Text("Fernseher"),
-          subtitle: Text("$_counter"),
-          trailing: Text("In Zustellung"),
+          subtitle: Text("UPS"),
+          trailing: Text("Zugestellt"),
         ),
       ],
     );
