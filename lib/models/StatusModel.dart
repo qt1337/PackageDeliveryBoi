@@ -5,11 +5,13 @@ class StatusModel {
   String status;
   String name;
   IconData category;
+  String serviceCompany;
 
-  StatusModel(id, status, name, category) {
+  StatusModel(id, status, name, category, serviceCompany) {
     this.id = id;
     this.status = status;
     this.name = name;
     this.category = category;
+    this.serviceCompany = serviceCompany;
   }
 }

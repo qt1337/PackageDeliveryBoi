@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:package_delivery_boi/models/StatusModel.dart';
 
 Future<DeliveryStatus> fetchDeliveryStatus(id) async {
   final response =
@@ -10,14 +11,13 @@ Future<DeliveryStatus> fetchDeliveryStatus(id) async {
   if (response.statusCode == 200) {
     return DeliveryStatus.fromJson(json.decode(response.body));
   } else {
-    throw Exception('Failed to fetch data');
+    throw Exception('Failed to fetch data | statusCode: ' + response.statusCode.toString());
   }
 }
 
 class DeliveryStatus {
   String id;
   String status;
-
   DeliveryStatus(
       {this.id, this.status});
 

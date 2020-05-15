@@ -13,16 +13,17 @@ class PackageList extends StatefulWidget {
 }
 
 class _PackageListState extends State<PackageList> {
-
   @override
   void initState() {
     super.initState();
   }
 
-  List<String> entries;
-  List<IconData> category;
-  List<String> status;
-  List<String> serviceCompany;
+  static StatusModel test1 = new StatusModel("id1", "in Bearbeitung", "Handy", Icons.phone, "DHL");
+  static StatusModel test2 = new StatusModel("id2", "in Zustellung", "Fernseher", Icons.tv, "Hermes");
+  static StatusModel test3 = new StatusModel("id3", "Zugestellt", "Auto", Icons.directions_car, "UPS");
+
+  List<StatusModel> listEntries = <StatusModel>[test1,test2,test3];
+
 
   @override
   Widget build(BuildContext context) {
@@ -52,10 +53,7 @@ class _PackageListState extends State<PackageList> {
 
   void _saveToList(StatusModel package) {
     setState(() {
-      entries.add(package.name);
-      category.add(package.category);
-      status.add(package.status);
-      serviceCompany.add("Amazon");
+      listEntries.add(package);
     });
   }
 
@@ -77,12 +75,12 @@ class _PackageListState extends State<PackageList> {
                 onPressed: () {
                   StatusModel newPackage = new StatusModel(
                       customControllerId.text.toString(),
-                      null,
+                      "null",
                       customControllerName.text.toString(),
-                      Icons.wb_sunny);
+                      Icons.wb_sunny,
+                      "Amazon");
 
-                  Navigator.of(context).pop(
-                      newPackage);
+                  Navigator.of(context).pop(newPackage);
                 },
               )
             ],
@@ -112,19 +110,14 @@ class _PackageListState extends State<PackageList> {
   }
 
   Widget getPackageListView() {
-    entries = <String>['Fernseher', 'Handy', 'Waschmaschine'];
-    category = <IconData>[Icons.tv, Icons.phone, Icons.radio];
-    status = <String>['Wird Bearbeitet', 'In Zustellung', 'Zugestellt'];
-    serviceCompany = <String>['DHL', 'Hermes', 'UPS'];
-
     var packageListView = ListView.separated(
-      itemCount: entries.length,
+      itemCount: listEntries.length,
       itemBuilder: (BuildContext context, int index) {
         return ListTile(
-          leading: Icon(category[index]),
-          title: Text(entries[index]),
-          subtitle: Text(serviceCompany[index]),
-          trailing: Text(status[index]),
+          leading: Icon(listEntries[index].category),
+          title: Text(listEntries[index].name),
+          subtitle: Text(listEntries[index].serviceCompany),
+          trailing: Text(listEntries[index].status),
         );
       },
       separatorBuilder: (BuildContext context, int index) => const Divider(),
