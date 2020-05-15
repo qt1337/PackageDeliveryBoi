@@ -61,6 +61,6 @@ Future<List<StatusModel>> readList() async {
     return resList;
   } catch (e) {
     // If encountering an error, return 0.
-    return List();
+    return List<StatusModel>();
   }
 }
