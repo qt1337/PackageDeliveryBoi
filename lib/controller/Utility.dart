@@ -21,7 +21,7 @@ Future<File> writeList(List<StatusModel> modelList) async {
   final file = await _localFile;
 
   // Convert to json
-  List<Map> objList;
+  List<Map> objList = List<Map>();
   for(StatusModel tmpObj in modelList){
     var tmpMap = {
       'id': tmpObj.id,
@@ -37,11 +37,13 @@ Future<File> writeList(List<StatusModel> modelList) async {
   String objJson = JsonEncoder().convert(objList);
 
   // Write the file.
+  print(objJson);
   return file.writeAsString(objJson);
 }
 
 //Read Data
 Future<List<StatusModel>> readList() async {
+  print('In readList()');
   try {
     final file = await _localFile;
 
