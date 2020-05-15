@@ -26,7 +26,8 @@ Future<File> writeList(List<StatusModel> modelList) async {
     var tmpMap = {
       'id': tmpObj.id,
       'status': tmpObj.status,
-      'name': tmpObj.name
+      'name': tmpObj.name,
+      'category': tmpObj.category
     };
 
     objList.add(tmpMap);
@@ -51,7 +52,7 @@ Future<List<StatusModel>> readList() async {
     List<Map> tmpList = JsonDecoder().convert(contents);
     
     for(Map tmpObj in tmpList){
-      StatusModel tmpModel = new StatusModel(tmpObj['id'], tmpObj['status'], tmpObj['name']);
+      StatusModel tmpModel = new StatusModel(tmpObj['id'], tmpObj['status'], tmpObj['name'], tmpObj['category']);
 
       resList.add(tmpModel);
     }
