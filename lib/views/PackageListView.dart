@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:package_delivery_boi/controller/PackageListController.dart' as PLE;
+import 'package:package_delivery_boi/controller/PackageListController.dart'
+    as PLE;
+import 'package:package_delivery_boi/models/StatusModel.dart';
 
 class PackageList extends StatefulWidget {
   PackageList({Key key, this.title}) : super(key: key);
@@ -13,67 +15,89 @@ class PackageList extends StatefulWidget {
 class _PackageListState extends State<PackageList> {
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Builder(
-        builder: (context) =>
-          getPackageListView(), // ListView
-      ),
-      floatingActionButton: // addButton
-        Builder(
-          builder: (context) =>
-            FloatingActionButton(
-              onPressed: () {
-                _openAddPackageDialog(context).then((onValue) {
-                  SnackBar mySnackbar = SnackBar(content: Text("Package $onValue added."));
-                  Scaffold.of(context).showSnackBar(mySnackbar);
-                });
-              },
-              tooltip: 'Add Package',
-              child: Icon(Icons.add),
-            )
-        )
-    );
+  void initState() {
+    super.initState();
   }
 
-  Future<String> _openAddPackageDialog(BuildContext context) {
+  List<String> entries;
+  List<IconData> category;
+  List<String> status;
+  List<String> serviceCompany;
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
+        ),
+        body: Builder(
+          builder: (context) => getPackageListView(), // ListView
+        ),
+        floatingActionButton: // addButton
+            Builder(
+                builder: (context) => FloatingActionButton(
+                      onPressed: () {
+                        _openAddPackageDialog(context).then((onValue) {
+                          _saveToList(onValue);
+                          String package = onValue.name;
+                          SnackBar mySnackbar = SnackBar(
+                              content: Text("Package $package added."));
+                          Scaffold.of(context).showSnackBar(mySnackbar);
+                        });
+                      },
+                      tooltip: 'Add Package',
+                      child: Icon(Icons.add),
+                    )));
+  }
+
+  void _saveToList(StatusModel package) {
+    setState(() {
+      entries.add(package.name);
+      category.add(package.category);
+      status.add(package.status);
+      serviceCompany.add("Amazon");
+    });
+  }
+
+  Future<StatusModel> _openAddPackageDialog(BuildContext context) {
     TextEditingController customControllerName = new TextEditingController();
     TextEditingController customControllerId = new TextEditingController();
 
     return showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text("Add a package"),
-          content: getTextFieldsForDialog(customControllerName, customControllerId),
-          actions: <Widget>[
-            MaterialButton(
-              elevation: 5.0,
-              child: Text("Add"),
-              onPressed: () {
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Add a package"),
+            content: getTextFieldsForDialog(
+                customControllerName, customControllerId),
+            actions: <Widget>[
+              MaterialButton(
+                elevation: 5.0,
+                child: Text("Add"),
+                onPressed: () {
+                  StatusModel newPackage = new StatusModel(
+                      customControllerId.text.toString(),
+                      null,
+                      customControllerName.text.toString(),
+                      Icons.wb_sunny);
 
-                Navigator.of(context).pop(customControllerName.text.toString() + " with package number " + customControllerId.text.toString());
-
-              },
-            )
-          ],
-          backgroundColor: Colors.red,
-          shape: RoundedRectangleBorder(
-            borderRadius:
-              BorderRadius.circular(20.0)
-          ),
-        );
-      },
-      barrierDismissible: false);
+                  Navigator.of(context).pop(
+                      newPackage);
+                },
+              )
+            ],
+            backgroundColor: Colors.red,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)),
+          );
+        },
+        barrierDismissible: false);
   }
 
-  Widget getTextFieldsForDialog(TextEditingController controllerName, TextEditingController controllerId) {
-    
+  Widget getTextFieldsForDialog(TextEditingController controllerName,
+      TextEditingController controllerId) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Text("Product"),
         TextField(
@@ -88,27 +112,22 @@ class _PackageListState extends State<PackageList> {
   }
 
   Widget getPackageListView() {
-    var packageListView = ListView(
-      children: <Widget>[
-        ListTile(
-          leading: Icon(Icons.tv),
-          title: Text("Fernseher"),
-          subtitle: Text("DHL"),
-          trailing: Text("In Zustellung"),
-        ),
-        ListTile(
-          leading: Icon(Icons.phone),
-          title: Text("Handy"),
-          subtitle: Text("DHL"),
-          trailing: Text("In Bearbeitung"),
-        ),
-        ListTile(
-          leading: Icon(Icons.tv),
-          title: Text("Fernseher"),
-          subtitle: Text("UPS"),
-          trailing: Text("Zugestellt"),
-        ),
-      ],
+    entries = <String>['Fernseher', 'Handy', 'Waschmaschine'];
+    category = <IconData>[Icons.tv, Icons.phone, Icons.radio];
+    status = <String>['Wird Bearbeitet', 'In Zustellung', 'Zugestellt'];
+    serviceCompany = <String>['DHL', 'Hermes', 'UPS'];
+
+    var packageListView = ListView.separated(
+      itemCount: entries.length,
+      itemBuilder: (BuildContext context, int index) {
+        return ListTile(
+          leading: Icon(category[index]),
+          title: Text(entries[index]),
+          subtitle: Text(serviceCompany[index]),
+          trailing: Text(status[index]),
+        );
+      },
+      separatorBuilder: (BuildContext context, int index) => const Divider(),
     );
     return packageListView;
   }

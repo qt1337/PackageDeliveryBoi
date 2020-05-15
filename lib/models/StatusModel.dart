@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
+
 class StatusModel {
   String id;
   String status;
   String name;
-  String category;
+  IconData category;
 
   StatusModel(id, status, name, category) {
     this.id = id;
