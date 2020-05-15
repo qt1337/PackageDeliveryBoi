@@ -36,7 +36,6 @@ Future<File> writeList(List<StatusModel> modelList) async {
 
   String objJson = JsonEncoder().convert(objList);
 
-  print(objJson);
   // Write the file.
   print(objJson);
   return file.writeAsString(objJson);
@@ -51,9 +50,13 @@ Future<List<StatusModel>> readList() async {
     // Read the file.
     String contents = await file.readAsString();
 
+    print(contents);
+
     //Convert back to list
     List<StatusModel> resList = List<StatusModel>();
-    List<Map> tmpList = JsonDecoder().convert(contents);
+    List<dynamic> tmpList = JsonDecoder().convert(contents);
+
+    print(tmpList);
     
     for(Map tmpObj in tmpList){
       StatusModel tmpModel = new StatusModel(tmpObj['id'], tmpObj['status'], tmpObj['name'], tmpObj['category'], tmpObj['serviceCompany']);
