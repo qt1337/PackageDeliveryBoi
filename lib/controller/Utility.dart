@@ -36,6 +36,7 @@ Future<File> writeList(List<StatusModel> modelList) async {
 
   String objJson = JsonEncoder().convert(objList);
 
+  print(objJson);
   // Write the file.
   print(objJson);
   return file.writeAsString(objJson);

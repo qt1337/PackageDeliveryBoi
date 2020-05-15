@@ -83,7 +83,7 @@ class _PackageListState extends State<PackageList> {
                       customControllerId.text.toString(),
                       "null",
                       customControllerName.text.toString(),
-                      Icons.wb_sunny,
+                      "FERNSEHER",
                       "Amazon");
 
                   Navigator.of(context).pop(newPackage);
@@ -120,7 +120,7 @@ class _PackageListState extends State<PackageList> {
       itemCount: listEntries.length,
       itemBuilder: (BuildContext context, int index) {
         return ListTile(
-          leading: Icon(listEntries[index].category),
+          leading: Icon(Icons.tv),
           title: Text(listEntries[index].name),
           subtitle: Text(listEntries[index].serviceCompany),
           trailing: Text(listEntries[index].status),

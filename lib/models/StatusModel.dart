@@ -4,7 +4,7 @@ class StatusModel {
   String id;
   String status;
   String name;
-  IconData category;
+  String category;
   String serviceCompany;
 
   StatusModel(id, status, name, category, serviceCompany) {
