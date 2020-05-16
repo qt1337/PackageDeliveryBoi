@@ -50,20 +50,22 @@ class _PackageListState extends State<PackageList> {
                       },
                       tooltip: 'Add Package',
                       child: Icon(Icons.add),
-                    )));
+                    )
+            )
+    );
   }
 
-  void _saveToList(StatusModel package) {
-    List<StatusModel> tempList = new List<StatusModel>();
-    tempList.addAll(listEntries);
-    tempList.add(package);
-    writeList(tempList);
-    listEntries = new List<StatusModel>();
-    fillList().then((result) {
-      setState(() {
-        listEntries.addAll(result);
-      });
+  void _saveToList(StatusModel package) async {
+
+    Future<DeliveryStatus> futureDeliveryStatus = fetchDeliveryStatus(package.id);
+    package.status = await futureDeliveryStatus.then((result) {
+      return result.status;
     });
+
+    setState(() {
+      listEntries.add(package);
+    });
+    writeList(listEntries);
   }
 
   Future<StatusModel> _openAddPackageDialog(BuildContext context) {
