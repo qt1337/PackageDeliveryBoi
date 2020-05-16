@@ -10,7 +10,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Package Delivery Boi',
       theme: ThemeData(
-        primarySwatch: Colors.red,
+        primaryColor: Colors.red,
+        accentColor: Colors.redAccent,
       ),
       home: PackageList(title: 'Packages'),
     );

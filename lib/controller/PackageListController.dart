@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:package_delivery_boi/controller/Utility.dart';
 import 'package:package_delivery_boi/models/StatusModel.dart';
 
 Future<DeliveryStatus> fetchDeliveryStatus(id) async {
@@ -27,4 +29,13 @@ class DeliveryStatus {
         status: json['shipments'][0]['status']['status']
     );
   }
+}
+
+
+
+Future<List<StatusModel>> fillList() async {
+  readList().then((result) {
+    writeList(result);
+  });
+  return await readList();
 }

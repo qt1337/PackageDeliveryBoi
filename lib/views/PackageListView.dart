@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:package_delivery_boi/controller/PackageListController.dart'
-    as PLE;
+import 'package:package_delivery_boi/controller/PackageListController.dart';
 import 'package:package_delivery_boi/controller/Utility.dart';
 import 'package:package_delivery_boi/models/StatusModel.dart';
 
@@ -16,18 +15,16 @@ class PackageList extends StatefulWidget {
 class _PackageListState extends State<PackageList> {
   List<StatusModel> listEntries = [];
 
+  bool _validate = true;
+
   @override
   void initState() {
     super.initState();
-    _fillList().then((result) {
+    fillList().then((result) {
       setState(() {
         listEntries.addAll(result);
       });
     });
-  }
-
-  Future<List<StatusModel>> _fillList() async {
-    return await readList();
   }
 
   @override
@@ -57,10 +54,16 @@ class _PackageListState extends State<PackageList> {
   }
 
   void _saveToList(StatusModel package) {
-    setState(() {
-      listEntries.add(package);
+    List<StatusModel> tempList = new List<StatusModel>();
+    tempList.addAll(listEntries);
+    tempList.add(package);
+    writeList(tempList);
+    listEntries = new List<StatusModel>();
+    fillList().then((result) {
+      setState(() {
+        listEntries.addAll(result);
+      });
     });
-    writeList(listEntries);
   }
 
   Future<StatusModel> _openAddPackageDialog(BuildContext context) {
@@ -75,22 +78,29 @@ class _PackageListState extends State<PackageList> {
             content: getTextFieldsForDialog(
                 customControllerName, customControllerId),
             actions: <Widget>[
-              MaterialButton(
+              FloatingActionButton(
                 elevation: 5.0,
-                child: Text("Add"),
+                child: Icon(Icons.add),
                 onPressed: () {
-                  StatusModel newPackage = new StatusModel(
-                      customControllerId.text.toString(),
-                      "null",
-                      customControllerName.text.toString(),
-                      "FERNSEHER",
-                      "Amazon");
+                  setState(() {
+                    customControllerId.text.length > 4
+                        ? _validate = true
+                        : _validate = false;
+                  });
+                  if (_validate) {
+                    StatusModel newPackage = new StatusModel(
+                        customControllerId.text.toString(),
+                        "null",
+                        customControllerName.text.toString(),
+                        "FERNSEHER",
+                        "Amazon");
 
-                  Navigator.of(context).pop(newPackage);
+                    Navigator.of(context).pop(newPackage);
+                  }
                 },
               )
             ],
-            backgroundColor: Colors.red,
+            backgroundColor: Colors.white,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0)),
           );
@@ -103,13 +113,32 @@ class _PackageListState extends State<PackageList> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Text("Product"),
-        TextField(
+        TextFormField(
           controller: controllerName,
+          cursorColor: Colors.black,
+          decoration: new InputDecoration(
+              border: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              errorBorder: InputBorder.none,
+              disabledBorder: InputBorder.none,
+              contentPadding:
+                  EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
+              hintText: "Product"),
         ),
-        Text("Package Number"),
-        TextField(
+        TextFormField(
           controller: controllerId,
+          cursorColor: Colors.black,
+          decoration: new InputDecoration(
+              errorText: _validate ? null : "Enter a valid tracking number!",
+              border: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              errorBorder: InputBorder.none,
+              disabledBorder: InputBorder.none,
+              contentPadding:
+                  EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
+              hintText: "Tracking Number"),
         ),
       ],
     );
@@ -123,7 +152,7 @@ class _PackageListState extends State<PackageList> {
           leading: Icon(Icons.tv),
           title: Text(listEntries[index].name),
           subtitle: Text(listEntries[index].serviceCompany),
-          trailing: Text(listEntries[index].status),
+          trailing: Text(listEntries[index].status == null ? "ValueIsNull" : listEntries[index].status),
         );
       },
       separatorBuilder: (BuildContext context, int index) => const Divider(),

@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+import 'package:package_delivery_boi/controller/PackageListController.dart';
 import 'package:package_delivery_boi/models/StatusModel.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
@@ -18,14 +20,26 @@ Future<File> get _localFile async {
 
 //Write Data
 Future<File> writeList(List<StatusModel> modelList) async {
+  print("in writeList()");
   final file = await _localFile;
 
   // Convert to json
   List<Map> objList = List<Map>();
   for(StatusModel tmpObj in modelList){
+    String status;
+    Future<DeliveryStatus> futureDeliveryStatus = fetchDeliveryStatus(tmpObj.id);
+    status = await futureDeliveryStatus.then((result) {
+      return result.status;
+      });
+
+    print("____");
+    print("WIR SIND HIER");
+    print(status);
+    print("WIR SIND HIER");
+    print("____");
     var tmpMap = {
       'id': tmpObj.id,
-      'status': tmpObj.status,
+      'status': status,
       'name': tmpObj.name,
       'category': tmpObj.category,
       'serviceCompany': tmpObj.serviceCompany
@@ -37,7 +51,6 @@ Future<File> writeList(List<StatusModel> modelList) async {
   String objJson = JsonEncoder().convert(objList);
 
   // Write the file.
-  print(objJson);
   return file.writeAsString(objJson);
 }
 
@@ -50,13 +63,11 @@ Future<List<StatusModel>> readList() async {
     // Read the file.
     String contents = await file.readAsString();
 
-    print(contents);
 
     //Convert back to list
     List<StatusModel> resList = List<StatusModel>();
     List<dynamic> tmpList = JsonDecoder().convert(contents);
 
-    print(tmpList);
     
     for(Map tmpObj in tmpList){
       StatusModel tmpModel = new StatusModel(tmpObj['id'], tmpObj['status'], tmpObj['name'], tmpObj['category'], tmpObj['serviceCompany']);
