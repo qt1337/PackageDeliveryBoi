@@ -56,11 +56,15 @@ class _PackageListState extends State<PackageList> {
   }
 
   void _saveToList(StatusModel package) async {
+    try {
+      Future<DeliveryStatus> futureDeliveryStatus = fetchDeliveryStatus(package.id);
+      package.status = await futureDeliveryStatus.then((result) {
+        return result.status;
+      });
+    } catch (e){
+      package.status = e.toString();
+    }
 
-    Future<DeliveryStatus> futureDeliveryStatus = fetchDeliveryStatus(package.id);
-    package.status = await futureDeliveryStatus.then((result) {
-      return result.status;
-    });
 
     setState(() {
       listEntries.add(package);
