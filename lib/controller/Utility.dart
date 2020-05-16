@@ -27,16 +27,15 @@ Future<File> writeList(List<StatusModel> modelList) async {
   List<Map> objList = List<Map>();
   for(StatusModel tmpObj in modelList){
     String status;
-    Future<DeliveryStatus> futureDeliveryStatus = fetchDeliveryStatus(tmpObj.id);
-    status = await futureDeliveryStatus.then((result) {
-      return result.status;
+    try {
+      Future<DeliveryStatus> futureDeliveryStatus = fetchDeliveryStatus(
+          tmpObj.id);
+      status = await futureDeliveryStatus.then((result) {
+        return result.status;
       });
-
-    print("____");
-    print("WIR SIND HIER");
-    print(status);
-    print("WIR SIND HIER");
-    print("____");
+    } catch (e) {
+      status = e.toString();
+    }
     var tmpMap = {
       'id': tmpObj.id,
       'status': status,
