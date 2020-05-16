@@ -50,21 +50,19 @@ class _PackageListState extends State<PackageList> {
                       },
                       tooltip: 'Add Package',
                       child: Icon(Icons.add),
-                    )
-            )
-    );
+                    )));
   }
 
   void _saveToList(StatusModel package) async {
     try {
-      Future<DeliveryStatus> futureDeliveryStatus = fetchDeliveryStatus(package.id);
+      Future<DeliveryStatus> futureDeliveryStatus =
+          fetchDeliveryStatus(package.id);
       package.status = await futureDeliveryStatus.then((result) {
         return result.status;
       });
-    } catch (e){
+    } catch (e) {
       package.status = e.toString();
     }
-
 
     setState(() {
       listEntries.add(package);
@@ -158,7 +156,16 @@ class _PackageListState extends State<PackageList> {
           leading: Icon(Icons.tv),
           title: Text(listEntries[index].name),
           subtitle: Text(listEntries[index].serviceCompany),
-          trailing: Text(listEntries[index].status == null ? "ValueIsNull" : listEntries[index].status),
+          trailing: Container(
+            width: 200.0,
+            child: Text(
+              listEntries[index].status == null
+                  ? "ValueIsNull"
+                  : listEntries[index].status,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 3,
+            ),
+          ),
         );
       },
       separatorBuilder: (BuildContext context, int index) => const Divider(),
