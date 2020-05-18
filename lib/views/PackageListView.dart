@@ -54,6 +54,11 @@ class _PackageListState extends State<PackageList> {
   }
 
   void _saveToList(StatusModel package) async {
+    setState(() {
+      listEntries.add(package);
+    });
+    writeList(listEntries);
+
     try {
       Future<DeliveryStatus> futureDeliveryStatus =
           fetchDeliveryStatus(package.id);
@@ -65,8 +70,13 @@ class _PackageListState extends State<PackageList> {
     }
 
     setState(() {
-      listEntries.add(package);
+      listEntries[listEntries.length -1] = package;
     });
+    writeList(listEntries);
+  }
+
+  void removePackage(int index){
+    listEntries.removeAt(index);
     writeList(listEntries);
   }
 
