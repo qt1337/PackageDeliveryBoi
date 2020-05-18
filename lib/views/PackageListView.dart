@@ -152,18 +152,37 @@ class _PackageListState extends State<PackageList> {
     var packageListView = ListView.separated(
       itemCount: listEntries.length,
       itemBuilder: (BuildContext context, int index) {
-        return ListTile(
-          leading: Icon(Icons.tv),
-          title: Text(listEntries[index].name),
-          subtitle: Text(listEntries[index].serviceCompany),
-          trailing: Container(
-            width: 200.0,
-            child: Text(
-              listEntries[index].status == null
-                  ? "ValueIsNull"
-                  : listEntries[index].status,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 3,
+        return Dismissible(
+          // Each Dismissible must contain a Key. Keys allow Flutter to
+          // uniquely identify widgets.
+          key: Key(listEntries[index].name),
+          // Provide a function that tells the app
+          // what to do after an item has been swiped away.
+          onDismissed: (direction) {
+            // Remove the item from the data source.
+            setState(() {
+              listEntries.removeAt(index);
+              writeList(listEntries);
+            });
+
+            // Show a snackbar. This snackbar could also contain "Undo" actions.
+            Scaffold
+                .of(context)
+                .showSnackBar(SnackBar(content: Text(listEntries[index].name  + "deleted")));
+          },
+          child: ListTile(
+            leading: Icon(Icons.tv),
+            title: Text(listEntries[index].name),
+            subtitle: Text(listEntries[index].serviceCompany),
+            trailing: Container(
+              width: 200.0,
+              child: Text(
+                listEntries[index].status == null
+                    ? "ValueIsNull"
+                    : listEntries[index].status,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 3,
+              ),
             ),
           ),
         );
