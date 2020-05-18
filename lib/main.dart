@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'controller/PackageListController.dart';
 import 'views/PackageListView.dart';
 
 void main() => runApp(MyApp());
@@ -13,6 +14,9 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.red,
         accentColor: Colors.redAccent,
       ),
+      routes: {
+        ExtractArgumentsScreen.routeName: (context) => ExtractArgumentsScreen(),
+      },
       home: PackageList(title: 'Packages'),
     );
   }

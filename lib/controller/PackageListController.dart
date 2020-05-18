@@ -2,9 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:package_delivery_boi/controller/Utility.dart';
 import 'package:package_delivery_boi/models/StatusModel.dart';
+import 'package:package_delivery_boi/views/PackageView.dart';
 
 Future<DeliveryStatus> fetchDeliveryStatus(id) async {
   final response =
@@ -38,4 +40,17 @@ Future<List<StatusModel>> fillList() async {
     writeList(result);
   });
   return await readList();
+}
+
+
+class ExtractArgumentsScreen extends StatelessWidget {
+  static const routeName = '/PackageView';
+
+  @override
+  Widget build(BuildContext context) {
+    final StatusModel args = ModalRoute.of(context).settings.arguments;
+
+    return Package(args: args);
+  }
+
 }

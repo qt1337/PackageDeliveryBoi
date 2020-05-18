@@ -185,10 +185,22 @@ class _PackageListState extends State<PackageList> {
               ),
             ),
           ),
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              ExtractArgumentsScreen.routeName,
+              arguments: listEntries[index],
+            );
+          },
         );
       },
       separatorBuilder: (BuildContext context, int index) => const Divider(),
     );
     return packageListView;
   }
+
 }
+
+
+
+
