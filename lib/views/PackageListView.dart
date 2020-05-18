@@ -76,7 +76,9 @@ class _PackageListState extends State<PackageList> {
   }
 
   void removePackage(int index){
-    listEntries.removeAt(index);
+    setState(() {
+      listEntries.removeAt(index);
+    });
     writeList(listEntries);
   }
 

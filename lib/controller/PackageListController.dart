@@ -50,7 +50,7 @@ class ExtractArgumentsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final StatusModel args = ModalRoute.of(context).settings.arguments;
 
-    return Package(args: args);
+    return Package(args: args,);
   }
 
 }
